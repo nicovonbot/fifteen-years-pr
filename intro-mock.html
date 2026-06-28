@@ -1,0 +1,233 @@
+<!-- ABOUTME: Motion-shell PROTOTYPE for the PR 15-yr anniversary evite intro — envelope + red H+R
+     ABOUTME: wax seal → press → seal-crack → flap-open → Polaroids spill & pile. Placeholder photos + stand-in chime. -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Fifteen Years — intro (motion mock)</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+  :root{
+    --paper:#f3ead7; --paper-dark:#e4d6ba; --ink:#3a2c20; --wax:#9d2230; --wax-hi:#c0392f;
+    --gold:#b08d4c; --shadow:rgba(40,26,15,.35);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:"Georgia","Times New Roman",serif; color:var(--ink);
+    background:radial-gradient(circle at 50% 30%, #2a3f4a 0%, #16242c 70%, #0e171c 100%);
+    overflow:hidden; -webkit-user-select:none; user-select:none;
+  }
+  .stage{position:fixed; inset:0; display:flex; align-items:center; justify-content:center}
+
+  /* ---------- Envelope ---------- */
+  .scene{position:relative; width:min(86vw,440px); aspect-ratio:7/5}
+  .envelope{position:absolute; inset:0; perspective:1400px}
+  .env-body{
+    position:absolute; inset:0; border-radius:10px;
+    background:linear-gradient(155deg,var(--paper) 0%,var(--paper-dark) 100%);
+    box-shadow:0 24px 60px var(--shadow), inset 0 0 60px rgba(150,120,70,.18);
+    overflow:hidden;
+  }
+  .env-body::after{ /* lower triangular pocket lines */
+    content:""; position:absolute; inset:0;
+    background:
+      linear-gradient(to top right, transparent 49.5%, rgba(120,95,55,.25) 50%, transparent 50.5%),
+      linear-gradient(to top left, transparent 49.5%, rgba(120,95,55,.25) 50%, transparent 50.5%);
+  }
+  .flap{
+    position:absolute; top:0; left:0; width:100%; height:56%;
+    transform-origin:top center; transform:rotateX(0deg); z-index:6;
+    background:linear-gradient(160deg,var(--paper-dark) 0%,#d8c8a6 100%);
+    clip-path:polygon(0 0,100% 0,50% 100%);
+    box-shadow:0 6px 14px rgba(60,40,20,.2);
+    backface-visibility:hidden;
+  }
+  /* Wax seal sits at the flap tip */
+  .seal{
+    position:absolute; left:50%; top:50%; transform:translate(-50%,-50%);
+    width:21%; aspect-ratio:1; border-radius:50%; z-index:9; cursor:pointer;
+    background:radial-gradient(circle at 35% 30%,var(--wax-hi),var(--wax) 60%,#7c1622 100%);
+    box-shadow:0 4px 10px rgba(0,0,0,.45), inset 0 2px 6px rgba(255,255,255,.25), inset 0 -3px 8px rgba(0,0,0,.4);
+    display:flex; align-items:center; justify-content:center;
+  }
+  .seal::before{content:""; position:absolute; inset:7%; border-radius:50%; border:1.5px dashed rgba(255,255,255,.35)}
+  .seal .mono{font-family:"Georgia",serif; font-weight:700; font-size:clamp(13px,4.2vw,22px); color:#f6e6c9; letter-spacing:.5px; text-shadow:0 1px 2px rgba(0,0,0,.5)}
+  .seal-half{position:absolute; left:50%; top:50%; width:21%; aspect-ratio:1; transform:translate(-50%,-50%); z-index:9; pointer-events:none; opacity:0;
+    background:radial-gradient(circle at 35% 30%,var(--wax-hi),var(--wax) 60%,#7c1622 100%); border-radius:50%}
+  .seal-half.l{clip-path:polygon(0 0,52% 0,52% 100%,0 100%)}
+  .seal-half.r{clip-path:polygon(48% 0,100% 0,100% 100%,48% 100%)}
+
+  /* ---------- Polaroids ---------- */
+  .polaroids{position:absolute; left:50%; top:46%; width:0; height:0; z-index:5}
+  .polaroid{
+    position:absolute; left:0; top:0; width:min(38vw,168px);
+    transform:translate(-50%,-50%) scale(.25); opacity:0;
+    background:#fffdf8; padding:8px 8px 30px; border-radius:3px;
+    box-shadow:0 10px 26px rgba(0,0,0,.4); will-change:transform,opacity;
+  }
+  .polaroid img{display:block; width:100%; aspect-ratio:1/1; object-fit:cover; background:#cdbfa6}
+  .polaroid .cap{position:absolute; left:0; bottom:7px; width:100%; text-align:center;
+    font-size:11px; letter-spacing:.4px; color:#6a5a44; font-style:italic}
+
+  /* ---------- Cover prompt ---------- */
+  .prompt{position:absolute; bottom:11%; left:0; width:100%; text-align:center; z-index:8;
+    color:#f3ead7; font-size:clamp(13px,3.6vw,16px); letter-spacing:2px; text-transform:uppercase; opacity:.9}
+  .prompt span{display:inline-block; animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:.45;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+
+  /* ---------- Invite stand-in ---------- */
+  .invite{position:fixed; inset:0; z-index:20; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; text-align:center; opacity:0; visibility:hidden;
+    padding:32px; color:#f3ead7;
+    background:radial-gradient(circle at 50% 35%, #24414a 0%, #122029 75%);}
+  .invite .kicker{letter-spacing:5px; text-transform:uppercase; font-size:13px; color:var(--gold)}
+  .invite h1{font-size:clamp(34px,11vw,62px); line-height:1.05; margin:10px 0 4px; font-weight:400}
+  .invite .amp{color:var(--wax-hi); font-style:italic}
+  .invite .sub{letter-spacing:3px; text-transform:uppercase; font-size:13px; opacity:.85; margin-top:6px}
+  .invite .rule{width:54px; height:1px; background:var(--gold); margin:22px 0}
+  .invite .meta{font-size:15px; line-height:1.7; opacity:.9}
+  .invite .rsvp{margin-top:26px; padding:13px 34px; border:1px solid var(--gold); color:#f3ead7;
+    letter-spacing:2px; text-transform:uppercase; font-size:13px; background:transparent; border-radius:2px; cursor:pointer}
+  .invite .note{margin-top:20px; font-size:11px; opacity:.5; letter-spacing:1px}
+
+  /* ---------- Controls ---------- */
+  .controls{position:fixed; top:14px; right:14px; z-index:40; display:flex; gap:8px}
+  .controls button{font-family:inherit; font-size:11px; letter-spacing:1.5px; text-transform:uppercase;
+    color:#f3ead7; background:rgba(0,0,0,.3); border:1px solid rgba(243,234,215,.3);
+    padding:7px 12px; border-radius:2px; cursor:pointer; backdrop-filter:blur(3px)}
+  .controls button:active{transform:scale(.96)}
+  .badge{position:fixed; bottom:10px; left:0; width:100%; text-align:center; z-index:40;
+    color:rgba(243,234,215,.45); font-size:10px; letter-spacing:1.5px}
+</style>
+</head>
+<body>
+  <div class="controls">
+    <button id="replay">↻ Replay</button>
+    <button id="skip">Skip →</button>
+  </div>
+
+  <div class="stage" id="stage">
+    <div class="scene" id="scene">
+      <div class="polaroids" id="polaroids"></div>
+      <div class="envelope">
+        <div class="env-body"></div>
+        <div class="flap" id="flap"></div>
+        <div class="seal" id="seal"><span class="mono">H&nbsp;R</span></div>
+        <div class="seal-half l" id="halfL"></div>
+        <div class="seal-half r" id="halfR"></div>
+      </div>
+      <div class="prompt" id="prompt"><span>Press the seal</span></div>
+    </div>
+  </div>
+
+  <div class="invite" id="invite">
+    <div class="kicker">Please join us</div>
+    <h1>Fifteen<br>Years</h1>
+    <div class="sub">Hector <span class="amp">&amp;</span> Rocío</div>
+    <div class="rule"></div>
+    <div class="meta">Puerto Rico · February 2027<br>Viejo San Juan</div>
+    <button class="rsvp">RSVP</button>
+    <div class="note">— invitation stand-in · real content lives on the live page —</div>
+  </div>
+
+  <div class="badge">MOTION MOCK · placeholder photos &amp; stand-in chime</div>
+
+<script>
+(function(){
+  // Stand-in photos (real-looking placeholders; swapped for Hector's Polaroids later)
+  const SEEDS = ['pr-old-sanjuan','pr-beach','pr-elmorro','pr-couple','pr-street','pr-sunset'];
+  const CAPS  = ['San Juan','Mar Caribe','El Morro','Nosotros','Calle del Sol','Febrero'];
+  const polaroidsEl = document.getElementById('polaroids');
+  const cards = SEEDS.map((s,i)=>{
+    const d=document.createElement('div'); d.className='polaroid';
+    d.innerHTML='<img alt="" src="https://picsum.photos/seed/'+s+'/320/320"><div class="cap">'+CAPS[i]+'</div>';
+    polaroidsEl.appendChild(d); return d;
+  });
+
+  const seal=document.getElementById('seal'), halfL=document.getElementById('halfL'),
+        halfR=document.getElementById('halfR'), flap=document.getElementById('flap'),
+        prompt=document.getElementById('prompt'), invite=document.getElementById('invite'),
+        scene=document.getElementById('scene');
+  let opened=false, tl=null;
+
+  // Final scattered pile layout (unit-scaled so it fits any screen)
+  function pile(){
+    const u=Math.min(window.innerWidth,window.innerHeight)/100;
+    return [
+      {x:-14*u,y:-6*u,r:-11}, {x:13*u,y:-9*u,r:9}, {x:-9*u,y:8*u,r:6},
+      {x:11*u,y:7*u,r:-7},    {x:0,y:0,r:2},       {x:2*u,y:-2*u,r:-3}
+    ];
+  }
+
+  // Soft stand-in chime via WebAudio — proves "audio fires on the press" with no licensed track.
+  function chime(){
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+      const ctx=new AC(), now=ctx.currentTime, master=ctx.createGain();
+      master.gain.setValueAtTime(0.0001,now);
+      master.gain.exponentialRampToValueAtTime(0.16,now+0.5);
+      master.gain.exponentialRampToValueAtTime(0.0001,now+4.6);
+      master.connect(ctx.destination);
+      [261.63,329.63,392.0,523.25].forEach((f,i)=>{
+        const o=ctx.createOscillator(),g=ctx.createGain();
+        o.type='sine'; o.frequency.value=f; g.gain.value=0.22/(i+1);
+        o.connect(g); g.connect(master); o.start(now+i*0.14); o.stop(now+4.7);
+      });
+    }catch(e){}
+  }
+
+  function open(){
+    if(opened) return; opened=true;
+    chime();
+    gsap.set([halfL,halfR],{opacity:1});
+    gsap.to(seal,{opacity:0,duration:.15});
+    tl=gsap.timeline();
+    // 1) seal cracks: a shake, then the two halves split and fall away
+    tl.to([halfL,halfR],{duration:.12,scale:1.08,yoyo:true,repeat:1})
+      .to(prompt,{opacity:0,duration:.3},'<')
+      .to(halfL,{x:'-26%',y:'34%',rotation:-46,opacity:0,duration:.55,ease:'power2.in'})
+      .to(halfR,{x:'26%',y:'34%',rotation:46,opacity:0,duration:.55,ease:'power2.in'},'<')
+      // 2) flap opens up and back
+      .to(flap,{rotationX:-172,duration:.7,ease:'power3.inOut'},'-=.15')
+      // 3) Polaroids spill out of the mouth and settle into a loose pile
+      .add('spill','-=.35');
+    const P=pile();
+    cards.forEach((c,i)=>{
+      gsap.set(c,{x:0,y:0,rotation:0,scale:.25,opacity:0,zIndex:10+i});
+      tl.to(c,{opacity:1,duration:.18},'spill+='+(i*0.13))
+        .to(c,{x:P[i].x,y:P[i].y,rotation:P[i].r,scale:1,duration:.72,ease:'back.out(1.5)'},'spill+='+(i*0.13));
+    });
+    // 4) settle, then cross-fade to the invitation stand-in
+    tl.to(scene,{scale:.94,duration:.5,ease:'power1.out'},'+=.5')
+      .to(scene,{opacity:0,duration:.7},'+=.2')
+      .set(invite,{visibility:'visible'},'<')
+      .to(invite,{opacity:1,duration:.9},'<');
+  }
+
+  function reset(){
+    if(tl) tl.kill();
+    opened=false;
+    gsap.set(scene,{opacity:1,scale:1});
+    gsap.set(invite,{opacity:0,visibility:'hidden'});
+    gsap.set(seal,{opacity:1});
+    gsap.set([halfL,halfR],{opacity:0,x:0,y:0,rotation:0,scale:1});
+    gsap.set(flap,{rotationX:0});
+    gsap.set(prompt,{opacity:.9});
+    cards.forEach(c=>gsap.set(c,{x:0,y:0,rotation:0,scale:.25,opacity:0}));
+  }
+
+  seal.addEventListener('click',open);
+  document.getElementById('replay').addEventListener('click',reset);
+  document.getElementById('skip').addEventListener('click',function(){
+    if(tl) tl.kill();
+    gsap.to(scene,{opacity:0,duration:.4});
+    gsap.set(invite,{visibility:'visible'}); gsap.to(invite,{opacity:1,duration:.5});
+    opened=true;
+  });
+  window.addEventListener('resize',()=>{ if(!opened) reset(); });
+})();
+</script>
+</body>
+</html>
