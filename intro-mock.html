@@ -191,19 +191,22 @@
       .to(halfR,{x:'26%',y:'34%',rotation:46,opacity:0,duration:.55,ease:'power2.in'},'<')
       // 2) flap opens up and back
       .to(flap,{rotationX:-172,duration:.7,ease:'power3.inOut'},'-=.15')
-      // 3) Polaroids spill out of the mouth and settle into a loose pile
-      .add('spill','-=.35');
+      // 3) Polaroids spill out one at a time — slow & graceful, each photo gets its moment
+      .add('spill','-=.2');
     const P=pile();
+    const STAG=0.55, DUR=0.95; // ~0.55s between photos, ~0.95s graceful settle each
     cards.forEach((c,i)=>{
-      gsap.set(c,{x:0,y:0,rotation:0,scale:.25,opacity:0,zIndex:10+i});
-      tl.to(c,{opacity:1,duration:.18},'spill+='+(i*0.13))
-        .to(c,{x:P[i].x,y:P[i].y,rotation:P[i].r,scale:1,duration:.72,ease:'back.out(1.5)'},'spill+='+(i*0.13));
+      const at='spill+='+(i*STAG);
+      gsap.set(c,{x:0,y:-4,rotation:0,scale:.18,opacity:0,zIndex:10+i});
+      tl.to(c,{opacity:1,duration:.35,ease:'power1.out'},at)
+        .to(c,{x:P[i].x,y:P[i].y,rotation:P[i].r,scale:1,duration:DUR,ease:'back.out(1.15)'},at);
     });
-    // 4) settle, then cross-fade to the invitation stand-in
-    tl.to(scene,{scale:.94,duration:.5,ease:'power1.out'},'+=.5')
-      .to(scene,{opacity:0,duration:.7},'+=.2')
+    // 4) wait for the last photo to land, settle, then cross-fade to the invitation stand-in
+    const lastLand=(cards.length-1)*STAG+DUR;
+    tl.to(scene,{scale:.95,duration:.7,ease:'power1.out'},'spill+='+(lastLand+0.5))
+      .to(scene,{opacity:0,duration:.8},'+=.35')
       .set(invite,{visibility:'visible'},'<')
-      .to(invite,{opacity:1,duration:.9},'<');
+      .to(invite,{opacity:1,duration:1.0},'<');
   }
 
   function reset(){
