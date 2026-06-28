@@ -74,6 +74,9 @@
     font-size:1.7rem;text-align:center;color:var(--ink);margin:0;}
   .rsvp .by{text-align:center;color:var(--taupe);font-size:.92rem;margin:4px 0 20px;}
   .rsvp .by b{color:var(--gold);font-weight:500;}
+  .already{display:none;text-align:center;background:rgba(176,138,79,.12);border:1px solid var(--gold-soft);
+    border-radius:3px;color:var(--taupe);font-size:.85rem;padding:9px 12px;margin:0 0 16px;}
+  .already.show{display:block;}
   .field{margin:0 0 15px;}
   .field label{display:block;font-size:.72rem;letter-spacing:1.5px;text-transform:uppercase;color:var(--taupe);margin:0 0 6px;}
   .field input[type=text],.field input[type=number],.field textarea{width:100%;padding:11px 13px;border:1px solid var(--gold-soft);
@@ -148,6 +151,7 @@
     <section class="rsvp anim">
       <h2>RSVP</h2>
       <p class="by">Kindly reply by <b>August 31, 2026</b> so we can hold your place.</p>
+      <p class="already" id="already">Looks like you already RSVP'd — submit again to update your reply.</p>
       <form id="rsvpForm">
         <div class="field"><label for="name">Your name(s)</label>
           <input type="text" id="name" name="name" required placeholder="e.g. Karina + 1" /></div>
@@ -193,7 +197,7 @@
     document.getElementById('rsvpForm').addEventListener('submit',function(ev){
       ev.preventDefault();
       const form=ev.target, cfg=window.RSVP_CONFIG;
-      const done=()=>{form.style.display='none';document.getElementById('thanks').classList.add('show');};
+      const done=()=>{try{localStorage.setItem('pr_rsvped','1');}catch(e){}form.style.display='none';document.getElementById('thanks').classList.add('show');};
       if(cfg.action && cfg.fields && cfg.fields.name){
         const d=new FormData();
         const get=(n)=>form.querySelector('[name="'+n+'"]:checked')||form.querySelector('[name="'+n+'"]');
@@ -206,6 +210,8 @@
         fetch(cfg.action,{method:'POST',mode:'no-cors',body:d}).finally(done);
       } else { done(); }
     });
+    // submit-only soft notice: show only if a prior SUCCESSFUL submit set the flag (never on mere visit)
+    try{ if(localStorage.getItem('pr_rsvped')) document.getElementById('already').classList.add('show'); }catch(e){}
   </script>
   <script src="config.js"></script>
 </body>
