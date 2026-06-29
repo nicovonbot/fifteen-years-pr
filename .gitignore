@@ -1,0 +1,9 @@
+# Render & screenshot scratch
+*.png
+test-flagged.html
+download.txt
+
+# Local RSVP / form data — keep private, never commit to a public repo
+.entries.json
+.form.json
+.form_page.html
