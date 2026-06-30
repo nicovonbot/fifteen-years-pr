@@ -191,14 +191,14 @@
   function open(){
     if(opened) return; opened=true;
     chime();
-    gsap.set([halfL,halfR],{opacity:1});
+    gsap.set([halfL,halfR],{xPercent:-50,yPercent:-50,opacity:1});
     gsap.to(seal,{opacity:0,duration:.15});
     tl=gsap.timeline();
     // 1) seal cracks: a shake, then the two halves split and fall away
     tl.to([halfL,halfR],{duration:.12,scale:1.08,yoyo:true,repeat:1})
       .to(prompt,{opacity:0,duration:.3},'<')
-      .to(halfL,{x:'-26%',y:'34%',rotation:-46,opacity:0,duration:.55,ease:'power2.in'})
-      .to(halfR,{x:'26%',y:'34%',rotation:46,opacity:0,duration:.55,ease:'power2.in'},'<')
+      .to(halfL,{xPercent:-76,yPercent:-16,rotation:-46,opacity:0,duration:.55,ease:'power2.in'})
+      .to(halfR,{xPercent:-24,yPercent:-16,rotation:46,opacity:0,duration:.55,ease:'power2.in'},'<')
       // 2) flap opens up and back
       .to(flap,{rotationX:-172,duration:.7,ease:'power3.inOut'},'-=.15')
       // 3) Polaroids spill out one at a time — slow & graceful, each photo gets its moment
@@ -225,7 +225,7 @@
     gsap.set(scene,{opacity:1,scale:1});
     gsap.set(invite,{opacity:0,visibility:'hidden'});
     gsap.set(seal,{opacity:1});
-    gsap.set([halfL,halfR],{opacity:0,x:0,y:0,rotation:0,scale:1});
+    gsap.set([halfL,halfR],{opacity:0,xPercent:-50,yPercent:-50,x:0,y:0,rotation:0,scale:1});
     gsap.set(flap,{rotationX:0});
     gsap.set(prompt,{opacity:.9});
     cards.forEach(c=>gsap.set(c,{x:0,y:0,rotation:0,scale:.25,opacity:0}));
