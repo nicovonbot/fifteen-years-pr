@@ -7,6 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
 <title>Fifteen Years — intro (motion mock)</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap" rel="stylesheet">
 <style>
   :root{
     --paper:#f3ead7; --paper-dark:#e4d6ba; --ink:#3a2c20; --wax:#9d2230; --wax-hi:#c0392f;
@@ -68,8 +71,9 @@
     box-shadow:0 10px 26px rgba(0,0,0,.4); will-change:transform,opacity;
   }
   .polaroid img{display:block; width:100%; aspect-ratio:1/1; object-fit:cover; background:#cdbfa6}
-  .polaroid .cap{position:absolute; left:0; bottom:7px; width:100%; text-align:center;
-    font-size:11px; letter-spacing:.4px; color:#6a5a44; font-style:italic}
+  .polaroid .cap{position:absolute; left:0; bottom:6px; width:100%; text-align:center;
+    font-family:'Permanent Marker', cursive; font-size:12px; letter-spacing:.2px;
+    color:#161616; line-height:1.1; padding:0 6px; box-sizing:border-box}
 
   /* ---------- Cover prompt ---------- */
   .prompt{position:absolute; bottom:11%; left:0; width:100%; text-align:center; z-index:8;
@@ -136,13 +140,19 @@
 
 <script>
 (function(){
-  // Stand-in photos (real-looking placeholders; swapped for Hector's Polaroids later)
-  const SEEDS = ['pr-old-sanjuan','pr-beach','pr-elmorro','pr-couple','pr-street','pr-sunset'];
-  const CAPS  = ['San Juan','Mar Caribe','El Morro','Nosotros','Calle del Sol','Febrero'];
+  // Hector & Rocio — real Polaroids, chronological (wedding → today)
+  const PHOTOS = [
+    {src:'assets/pol-justmarried.jpg', cap:"Just Married! ❤️ (Feb. '12)"},
+    {src:'assets/pol-venezia.jpg',     cap:'Venezia (June 2022)'},
+    {src:'assets/pol-roma.jpg',        cap:"Roma 🇮🇹 (June '22)"},
+    {src:'assets/pol-tokyo.jpg',       cap:"Tokyo 🇯🇵 (Dec. '23)"},
+    {src:'assets/pol-miami.jpg',       cap:"Miami (Feb. '26)"},
+    {src:'assets/pol-cabo.jpg',        cap:'Cabo 2026'},
+  ];
   const polaroidsEl = document.getElementById('polaroids');
-  const cards = SEEDS.map((s,i)=>{
+  const cards = PHOTOS.map((p,i)=>{
     const d=document.createElement('div'); d.className='polaroid';
-    d.innerHTML='<img alt="" src="https://picsum.photos/seed/'+s+'/320/320"><div class="cap">'+CAPS[i]+'</div>';
+    d.innerHTML='<img alt="" src="'+p.src+'"><div class="cap">'+p.cap+'</div>';
     polaroidsEl.appendChild(d); return d;
   });
 
