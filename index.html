@@ -11,7 +11,7 @@
 <meta name="description" content="Hector & Rocio — fifteen years of marriage. An all-white celebration in San Juan, Puerto Rico, Feb 11–14, 2027. RSVP by Aug 31, 2026." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Pinyon+Script&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Permanent+Marker&family=Pinyon+Script&family=Work+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
     --ivory:#f8f3ea;--paper:#fdfbf6;--ink:#3c362c;--taupe:#73695a;
@@ -111,9 +111,71 @@
     .days label{flex:1 1 calc(50% - 8px);justify-content:center;}
   }
   @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;}}
+
+  /* ========== INTRO GATE — sealed envelope → press → seal cracks → Polaroids spill → reveal ========== */
+  body.intro-active{overflow:hidden;}
+  #introGate{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+    background:radial-gradient(circle at 50% 30%,#2a3f4a 0%,#16242c 70%,#0e171c 100%);
+    -webkit-user-select:none;user-select:none;font-family:'Georgia','Times New Roman',serif;}
+  #introGate .scene{position:relative;width:min(86vw,440px);aspect-ratio:7/5;}
+  #introGate .envelope{position:absolute;inset:0;perspective:1400px;}
+  #introGate .env-body{position:absolute;inset:0;border-radius:10px;
+    background:linear-gradient(155deg,#f3ead7 0%,#e4d6ba 100%);
+    box-shadow:0 24px 60px rgba(40,26,15,.35),inset 0 0 60px rgba(150,120,70,.18);overflow:hidden;}
+  #introGate .env-body::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to top right,transparent 49.5%,rgba(120,95,55,.25) 50%,transparent 50.5%),
+              linear-gradient(to top left,transparent 49.5%,rgba(120,95,55,.25) 50%,transparent 50.5%);}
+  #introGate .flap{position:absolute;top:0;left:0;width:100%;height:56%;transform-origin:top center;transform:rotateX(0deg);z-index:6;
+    background:linear-gradient(160deg,#e4d6ba 0%,#d8c8a6 100%);clip-path:polygon(0 0,100% 0,50% 100%);
+    box-shadow:0 6px 14px rgba(60,40,20,.2);backface-visibility:hidden;}
+  #introGate .seal{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:21%;aspect-ratio:1;border-radius:50%;z-index:9;cursor:pointer;
+    background:radial-gradient(circle at 35% 30%,#c0392f,#9d2230 60%,#7c1622 100%);
+    box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 2px 6px rgba(255,255,255,.25),inset 0 -3px 8px rgba(0,0,0,.4);
+    display:flex;align-items:center;justify-content:center;}
+  #introGate .seal::before{content:"";position:absolute;inset:7%;border-radius:50%;border:1.5px dashed rgba(255,255,255,.35);}
+  #introGate .seal .mono{font-family:'Georgia',serif;font-weight:700;font-size:clamp(13px,4.2vw,22px);color:#f6e6c9;letter-spacing:.5px;text-shadow:0 1px 2px rgba(0,0,0,.5);}
+  #introGate .seal-half{position:absolute;left:50%;top:50%;width:21%;aspect-ratio:1;transform:translate(-50%,-50%);z-index:9;pointer-events:none;opacity:0;
+    background:radial-gradient(circle at 35% 30%,#c0392f,#9d2230 60%,#7c1622 100%);border-radius:50%;}
+  #introGate .seal-half.l{clip-path:polygon(0 0,52% 0,52% 100%,0 100%);}
+  #introGate .seal-half.r{clip-path:polygon(48% 0,100% 0,100% 100%,48% 100%);}
+  #introGate .polaroids{position:absolute;left:50%;top:46%;width:0;height:0;z-index:5;}
+  #introGate .polaroids{pointer-events:none;}
+  #introGate .polaroid{position:absolute;left:0;top:0;width:min(38vw,168px);transform:translate(-50%,-50%) scale(.25);opacity:0;pointer-events:none;
+    background:#fffdf8;padding:8px 8px 30px;border-radius:3px;box-shadow:0 10px 26px rgba(0,0,0,.4);will-change:transform,opacity;}
+  #introGate .polaroid img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#cdbfa6;}
+  #introGate .polaroid .cap{position:absolute;left:0;bottom:6px;width:100%;text-align:center;
+    font-family:'Permanent Marker',cursive;font-size:12px;letter-spacing:.2px;color:#161616;line-height:1.1;padding:0 6px;}
+  #introGate .prompt{position:absolute;top:calc(100% + 18px);left:50%;transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;z-index:8;
+    color:#f3ead7;font-size:clamp(13px,3.6vw,16px);letter-spacing:2px;text-transform:uppercase;opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.55);}
+  #introGate .prompt span{display:inline-block;animation:introPulse 1.8s ease-in-out infinite;}
+  @keyframes introPulse{0%,100%{opacity:.45;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
+  #introGate .skip{position:fixed;top:14px;right:14px;z-index:130;font-family:'Work Sans',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    color:#f3ead7;background:rgba(0,0,0,.3);border:1px solid rgba(243,234,215,.3);padding:7px 12px;border-radius:2px;cursor:pointer;
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+  #introGate .skip:active{transform:scale(.96);}
+  @media (prefers-reduced-motion:reduce){#introGate{display:none;}}
 </style>
 </head>
-<body>
+<body class="intro-active">
+  <!-- INTRO GATE: shown first; cracks open to reveal the evite below. Removed entirely for reduced-motion. -->
+  <div id="introGate" role="dialog" aria-label="Open your invitation">
+    <button class="skip" id="introSkip" type="button">Skip intro →</button>
+    <div class="scene" id="scene">
+      <div class="polaroids" id="polaroids"></div>
+      <div class="envelope">
+        <div class="env-body"></div>
+        <div class="flap" id="flap"></div>
+        <div class="seal" id="seal"><span class="mono">H&nbsp;R</span></div>
+        <div class="seal-half l" id="halfL"></div>
+        <div class="seal-half r" id="halfR"></div>
+      </div>
+      <div class="prompt" id="prompt"><span>Press the seal</span></div>
+    </div>
+    <!-- MUSIC HOOK: Hector's track drops in here, e.g.
+         <audio id="introMusic" src="assets/intro-music.mp3" preload="auto"></audio>
+         then call introMusic.play() at the marked spot in open(). -->
+  </div>
+
   <header class="hero">
     <img src="assets/osj1-taste.jpg" alt="A sunlit yellow colonial facade with a palm and white balcony in Viejo San Juan, Puerto Rico" />
     <div class="hero-panel anim">
@@ -189,11 +251,107 @@
   <script>
     window.RSVP_CONFIG = window.RSVP_CONFIG || { action:"", fields:{} };
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!reduce && window.gsap){
-      gsap.set('.anim',{opacity:0,y:18});
-      gsap.to('.hero-panel.anim',{opacity:1,y:0,duration:.9,delay:.2,ease:'power2.out'});
-      gsap.to('.wrap .anim',{opacity:1,y:0,duration:.7,stagger:.09,delay:.5,ease:'power2.out'});
-    } else { document.querySelectorAll('.anim').forEach(el=>{el.style.opacity=1;el.style.transform='none';}); }
+
+    // Hold the evite's entrance until the intro hands off (avoids any flash behind the gate).
+    if(!reduce && window.gsap){ gsap.set('.anim',{opacity:0,y:18}); }
+    let eviteRevealed=false;
+    function revealEvite(){
+      if(eviteRevealed) return; eviteRevealed=true;
+      if(!reduce && window.gsap){
+        gsap.to('.hero-panel.anim',{opacity:1,y:0,duration:.9,delay:.05,ease:'power2.out'});
+        gsap.to('.wrap .anim',{opacity:1,y:0,duration:.7,stagger:.09,delay:.35,ease:'power2.out'});
+      } else {
+        document.querySelectorAll('.anim').forEach(el=>{el.style.opacity=1;el.style.transform='none';});
+      }
+    }
+
+    // ===== Intro gate: envelope + wax seal → press → crack → Polaroids spill → reveal the evite =====
+    (function(){
+      const gate=document.getElementById('introGate');
+      if(!gate){ revealEvite(); return; }
+      const reduceMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // Reduced motion or no GSAP: skip the ceremony, drop the gate, show the evite immediately.
+      if(reduceMotion || !window.gsap){
+        gate.parentNode && gate.parentNode.removeChild(gate);
+        document.body.classList.remove('intro-active');
+        revealEvite();
+        return;
+      }
+
+      // Real Polaroids, chronological (wedding → today). Captions in marker font.
+      const PHOTOS=[
+        {src:'assets/pol-justmarried.jpg', cap:"Just Married! ❤️ (Feb. '12)"},
+        {src:'assets/pol-venezia.jpg',     cap:'Venezia (June 2022)'},
+        {src:'assets/pol-roma.jpg',        cap:"Roma 🇮🇹 (June '22)"},
+        {src:'assets/pol-tokyo.jpg',       cap:"Tokyo 🇯🇵 (Dec. '23)"},
+        {src:'assets/pol-miami.jpg',       cap:"Miami (Feb. '25)"},
+        {src:'assets/pol-cabo.jpg',        cap:'Cabo 2026'},
+      ];
+      const polaroidsEl=document.getElementById('polaroids');
+      const cards=PHOTOS.map(p=>{
+        const d=document.createElement('div'); d.className='polaroid';
+        d.innerHTML='<img alt="" src="'+p.src+'"><div class="cap">'+p.cap+'</div>';
+        polaroidsEl.appendChild(d); return d;
+      });
+
+      const seal=document.getElementById('seal'), halfL=document.getElementById('halfL'),
+            halfR=document.getElementById('halfR'), flap=document.getElementById('flap'),
+            prompt=document.getElementById('prompt'), scene=document.getElementById('scene');
+      let opened=false, tl=null, handed=false;
+
+      // Final scattered pile layout, unit-scaled so it fits any screen.
+      function pile(){
+        const u=Math.min(window.innerWidth,window.innerHeight)/100;
+        return [
+          {x:-19*u,y:-11*u,r:-13}, {x:17*u,y:-13*u,r:9}, {x:-21*u,y:9*u,r:7},
+          {x:19*u,y:11*u,r:-8},    {x:-4*u,y:1*u,r:4},   {x:5*u,y:-3*u,r:-5}
+        ];
+      }
+
+      // Fade the gate away and bring the real evite up underneath.
+      function handoff(){
+        if(handed) return; handed=true;
+        document.body.classList.remove('intro-active'); // unlock scrolling
+        revealEvite();
+        gsap.to(gate,{opacity:0,duration:.7,ease:'power1.out',
+          onComplete:()=>{ gate.parentNode && gate.parentNode.removeChild(gate); }});
+      }
+
+      function open(){
+        if(opened) return; opened=true;
+        // MUSIC HOOK: once Hector's track is wired, start it here (e.g. document.getElementById('introMusic').play()).
+        gsap.set([halfL,halfR],{xPercent:-50,yPercent:-50,opacity:1});
+        gsap.to(seal,{opacity:0,duration:.15});
+        tl=gsap.timeline();
+        // 1) seal cracks: a shake, then the two halves split and fall away
+        tl.to([halfL,halfR],{duration:.12,scale:1.08,yoyo:true,repeat:1})
+          .to(prompt,{opacity:0,duration:.3},'<')
+          .to(halfL,{xPercent:-76,yPercent:-16,rotation:-46,opacity:0,duration:.55,ease:'power2.in'})
+          .to(halfR,{xPercent:-24,yPercent:-16,rotation:46,opacity:0,duration:.55,ease:'power2.in'},'<')
+          // 2) flap opens up and back
+          .to(flap,{rotationX:-172,duration:.7,ease:'power3.inOut'},'-=.15')
+          // 3) Polaroids spill out one at a time — graceful, each gets its moment
+          .add('spill','-=.2');
+        const P=pile(); const STAG=1.0, DUR=0.95;
+        cards.forEach((c,i)=>{
+          const at='spill+='+(i*STAG);
+          gsap.set(c,{xPercent:-50,yPercent:-50,x:0,y:-4,rotation:0,scale:.18,opacity:0,zIndex:10+i});
+          tl.to(c,{opacity:1,duration:.35,ease:'power1.out'},at)
+            .to(c,{x:P[i].x,y:P[i].y,rotation:P[i].r,scale:1,duration:DUR,ease:'back.out(1.15)'},at);
+        });
+        // 4) last photo lands, brief settle, then hand off to the evite
+        const lastLand=(cards.length-1)*STAG+DUR;
+        tl.to(scene,{scale:.96,duration:.7,ease:'power1.out'},'spill+='+(lastLand+0.6))
+          .add(handoff,'+=.25');
+      }
+
+      seal.addEventListener('click',open);
+      document.getElementById('introSkip').addEventListener('click',function(){
+        if(tl) tl.kill();
+        handoff();
+      });
+    })();
     document.getElementById('rsvpForm').addEventListener('submit',function(ev){
       ev.preventDefault();
       const form=ev.target, cfg=window.RSVP_CONFIG;
