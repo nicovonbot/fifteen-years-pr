@@ -207,7 +207,7 @@
     const STAG=1.0, DUR=0.95; // 1s between photos (one at a time), ~0.95s graceful settle each
     cards.forEach((c,i)=>{
       const at='spill+='+(i*STAG);
-      gsap.set(c,{x:0,y:-4,rotation:0,scale:.18,opacity:0,zIndex:10+i});
+      gsap.set(c,{xPercent:-50,yPercent:-50,x:0,y:-4,rotation:0,scale:.18,opacity:0,zIndex:10+i});
       tl.to(c,{opacity:1,duration:.35,ease:'power1.out'},at)
         .to(c,{x:P[i].x,y:P[i].y,rotation:P[i].r,scale:1,duration:DUR,ease:'back.out(1.15)'},at);
     });
