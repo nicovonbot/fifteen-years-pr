@@ -144,21 +144,19 @@
   #introGate .polaroid{position:absolute;left:0;top:0;width:min(38vw,168px);transform:translate(-50%,-50%) scale(.25);opacity:0;pointer-events:none;
     background:#fffdf8;padding:8px 8px 30px;border-radius:3px;box-shadow:0 10px 26px rgba(0,0,0,.4);will-change:transform,opacity;}
   #introGate .polaroid img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#cdbfa6;}
-  #introGate .polaroid .cap{position:absolute;left:0;bottom:6px;width:100%;text-align:center;
-    font-family:'Permanent Marker',cursive;font-size:12px;letter-spacing:.2px;color:#161616;line-height:1.1;padding:0 6px;}
+  #introGate .polaroid .cap{position:absolute;left:0;bottom:5px;width:100%;text-align:center;
+    font-family:'Permanent Marker',cursive;font-size:9.5px;letter-spacing:.1px;color:#161616;line-height:1.08;padding:0 5px;text-wrap:balance;}
   #introGate .prompt{position:absolute;top:calc(100% + 18px);left:50%;transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;z-index:8;
     color:#f3ead7;font-size:clamp(13px,3.6vw,16px);letter-spacing:2px;text-transform:uppercase;opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.55);}
   #introGate .prompt span{display:inline-block;animation:introPulse 1.8s ease-in-out infinite;}
   @keyframes introPulse{0%,100%{opacity:.45;transform:translateY(0)}50%{opacity:1;transform:translateY(-3px)}}
-  #introGate .skip{position:fixed;top:14px;right:14px;z-index:130;font-family:'Work Sans',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
-    color:#f3ead7;background:rgba(0,0,0,.3);border:1px solid rgba(243,234,215,.3);padding:7px 12px;border-radius:2px;cursor:pointer;
-    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
+  #introGate .skip{position:fixed;top:14px;right:14px;z-index:130;font-family:'Work Sans',sans-serif;font-size:9.5px;letter-spacing:1.3px;text-transform:uppercase;
+    color:#f3ead7;background:none;border:none;padding:5px 6px;cursor:pointer;text-shadow:0 1px 3px rgba(0,0,0,.6);}
   #introGate .skip:active{transform:scale(.96);}
-  .mutebtn{position:fixed;top:14px;left:14px;z-index:130;font-family:'Work Sans',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
-    color:#f3ead7;background:rgba(0,0,0,.3);border:1px solid rgba(243,234,215,.3);padding:7px 12px;border-radius:2px;cursor:pointer;
-    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:flex;align-items:center;}
+  .mutebtn{position:fixed;top:12px;left:14px;z-index:130;font-size:16px;line-height:1;
+    background:none;border:none;padding:5px 6px;cursor:pointer;filter:drop-shadow(0 1px 3px rgba(0,0,0,.55));}
   .mutebtn[hidden]{display:none;}
-  .mutebtn:active{transform:scale(.96);}
+  .mutebtn:active{transform:scale(.94);}
   @media (prefers-reduced-motion:reduce){#introGate{display:none;}}
 </style>
 </head>
@@ -166,7 +164,7 @@
   <!-- Intro track: started on the seal-press, plays once and fades on its own. Kept OUTSIDE #introGate so it keeps playing after the gate is removed on hand-off to the evite. -->
   <audio id="introMusic" src="assets/intro-music.mp3" preload="auto" style="display:none"></audio>
   <!-- Mute toggle: appears when the music starts; lives outside #introGate so it persists into the evite. -->
-  <button id="muteBtn" class="mutebtn" type="button" aria-label="Mute music" aria-pressed="false" hidden><span id="muteIcon">🔊</span>&nbsp;<span id="muteLabel">Sound on</span></button>
+  <button id="muteBtn" class="mutebtn" type="button" aria-label="Mute music" aria-pressed="false" hidden><span id="muteIcon">🔊</span></button>
   <!-- INTRO GATE: shown first; cracks open to reveal the evite below. Removed entirely for reduced-motion. -->
   <div id="introGate" role="dialog" aria-label="Open your invitation">
     <button class="skip" id="introSkip" type="button">Skip intro →</button>
@@ -364,8 +362,8 @@
         muteBtn.addEventListener('click',function(){
           m.muted=!m.muted;
           muteBtn.setAttribute('aria-pressed', m.muted?'true':'false');
+          muteBtn.setAttribute('aria-label', m.muted?'Unmute music':'Mute music');
           document.getElementById('muteIcon').textContent=m.muted?'🔇':'🔊';
-          document.getElementById('muteLabel').textContent=m.muted?'Muted':'Sound on';
         });
         m.addEventListener('ended',function(){ muteBtn.hidden=true; });
       })();
