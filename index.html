@@ -147,7 +147,6 @@
   #introGate .polaroid .cap{position:absolute;left:0;bottom:0;height:30px;width:100%;
     display:flex;align-items:center;justify-content:center;text-align:center;
     font-family:'Permanent Marker',cursive;font-size:13px;letter-spacing:.1px;color:#161616;line-height:1.05;padding:0 5px;text-wrap:balance;}
-  #introGate .polaroid:first-child .cap{font-size:10px;}
   #introGate .prompt{position:absolute;top:calc(100% + 18px);left:50%;transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;z-index:8;
     color:#f3ead7;font-size:clamp(13px,3.6vw,16px);letter-spacing:2px;text-transform:uppercase;opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.55);}
   #introGate .prompt span{display:inline-block;animation:introPulse 1.8s ease-in-out infinite;}
@@ -288,7 +287,7 @@
 
       // Real Polaroids, chronological (wedding → today). Captions in marker font.
       const PHOTOS=[
-        {src:'assets/pol-justmarried.jpg', cap:"Just Married! ❤️ (Feb. '12)"},
+        {src:'assets/pol-justmarried.jpg', cap:"Just Married! ❤️"},
         {src:'assets/pol-venezia.jpg',     cap:'Venezia (June 2022)'},
         {src:'assets/pol-roma.jpg',        cap:"Roma 🇮🇹 (June '22)"},
         {src:'assets/pol-tokyo.jpg',       cap:"Tokyo 🇯🇵 (Dec. '23)"},
