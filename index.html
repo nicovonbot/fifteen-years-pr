@@ -144,8 +144,10 @@
   #introGate .polaroid{position:absolute;left:0;top:0;width:min(38vw,168px);transform:translate(-50%,-50%) scale(.25);opacity:0;pointer-events:none;
     background:#fffdf8;padding:8px 8px 30px;border-radius:3px;box-shadow:0 10px 26px rgba(0,0,0,.4);will-change:transform,opacity;}
   #introGate .polaroid img{display:block;width:100%;aspect-ratio:1/1;object-fit:cover;background:#cdbfa6;}
-  #introGate .polaroid .cap{position:absolute;left:0;bottom:5px;width:100%;text-align:center;
-    font-family:'Permanent Marker',cursive;font-size:9.5px;letter-spacing:.1px;color:#161616;line-height:1.08;padding:0 5px;text-wrap:balance;}
+  #introGate .polaroid .cap{position:absolute;left:0;bottom:0;height:30px;width:100%;
+    display:flex;align-items:center;justify-content:center;text-align:center;
+    font-family:'Permanent Marker',cursive;font-size:13px;letter-spacing:.1px;color:#161616;line-height:1.05;padding:0 5px;text-wrap:balance;}
+  #introGate .polaroid:first-child .cap{font-size:10px;}
   #introGate .prompt{position:absolute;top:calc(100% + 18px);left:50%;transform:translateX(-50%);width:max-content;max-width:90vw;text-align:center;z-index:8;
     color:#f3ead7;font-size:clamp(13px,3.6vw,16px);letter-spacing:2px;text-transform:uppercase;opacity:.9;text-shadow:0 1px 8px rgba(0,0,0,.55);}
   #introGate .prompt span{display:inline-block;animation:introPulse 1.8s ease-in-out infinite;}
