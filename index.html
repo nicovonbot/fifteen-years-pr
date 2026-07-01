@@ -134,7 +134,8 @@
     display:flex;align-items:center;justify-content:center;}
   #introGate .seal::before{content:"";position:absolute;inset:7%;border-radius:50%;border:1.5px dashed rgba(255,255,255,.35);}
   #introGate .seal .mono{font-family:'Georgia',serif;font-weight:700;font-size:clamp(13px,4.2vw,22px);color:#f6e6c9;letter-spacing:.5px;text-shadow:0 1px 2px rgba(0,0,0,.5);}
-  #introGate .seal-half{position:absolute;left:50%;top:50%;width:21%;aspect-ratio:1;transform:translate(-50%,-50%);z-index:9;pointer-events:none;opacity:0;
+  /* No CSS translate here: GSAP owns the centering via xPercent/yPercent in open(). A CSS translate(-50%,-50%) here stacks with GSAP's and doubles to -100% on some width/DPR combos (iPhone 393/414px), shoving the halves left. */
+  #introGate .seal-half{position:absolute;left:50%;top:50%;width:21%;aspect-ratio:1;z-index:9;pointer-events:none;opacity:0;
     background:radial-gradient(circle at 35% 30%,#c0392f,#9d2230 60%,#7c1622 100%);border-radius:50%;}
   #introGate .seal-half.l{clip-path:polygon(0 0,52% 0,52% 100%,0 100%);}
   #introGate .seal-half.r{clip-path:polygon(48% 0,100% 0,100% 100%,48% 100%);}
@@ -153,12 +154,19 @@
     color:#f3ead7;background:rgba(0,0,0,.3);border:1px solid rgba(243,234,215,.3);padding:7px 12px;border-radius:2px;cursor:pointer;
     -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);}
   #introGate .skip:active{transform:scale(.96);}
+  .mutebtn{position:fixed;top:14px;left:14px;z-index:130;font-family:'Work Sans',sans-serif;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;
+    color:#f3ead7;background:rgba(0,0,0,.3);border:1px solid rgba(243,234,215,.3);padding:7px 12px;border-radius:2px;cursor:pointer;
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);display:flex;align-items:center;}
+  .mutebtn[hidden]{display:none;}
+  .mutebtn:active{transform:scale(.96);}
   @media (prefers-reduced-motion:reduce){#introGate{display:none;}}
 </style>
 </head>
 <body class="intro-active">
   <!-- Intro track: started on the seal-press, plays once and fades on its own. Kept OUTSIDE #introGate so it keeps playing after the gate is removed on hand-off to the evite. -->
   <audio id="introMusic" src="assets/intro-music.mp3" preload="auto" style="display:none"></audio>
+  <!-- Mute toggle: appears when the music starts; lives outside #introGate so it persists into the evite. -->
+  <button id="muteBtn" class="mutebtn" type="button" aria-label="Mute music" aria-pressed="false" hidden><span id="muteIcon">🔊</span>&nbsp;<span id="muteLabel">Sound on</span></button>
   <!-- INTRO GATE: shown first; cracks open to reveal the evite below. Removed entirely for reduced-motion. -->
   <div id="introGate" role="dialog" aria-label="Open your invitation">
     <button class="skip" id="introSkip" type="button">Skip intro →</button>
@@ -322,6 +330,7 @@
         // Start the intro track on this user gesture (plays once; fade is baked into the file).
         const introMusic=document.getElementById('introMusic');
         if(introMusic){ introMusic.play().catch(()=>{}); }
+        const muteBtn0=document.getElementById('muteBtn'); if(muteBtn0){ muteBtn0.hidden=false; }
         gsap.set([halfL,halfR],{xPercent:-50,yPercent:-50,opacity:1});
         gsap.to(seal,{opacity:0,duration:.15});
         tl=gsap.timeline();
@@ -348,6 +357,18 @@
       }
 
       seal.addEventListener('click',open);
+      // Mute toggle for the intro music (persists into the evite; hidden again when the track ends).
+      (function(){
+        const muteBtn=document.getElementById('muteBtn'), m=document.getElementById('introMusic');
+        if(!muteBtn||!m) return;
+        muteBtn.addEventListener('click',function(){
+          m.muted=!m.muted;
+          muteBtn.setAttribute('aria-pressed', m.muted?'true':'false');
+          document.getElementById('muteIcon').textContent=m.muted?'🔇':'🔊';
+          document.getElementById('muteLabel').textContent=m.muted?'Muted':'Sound on';
+        });
+        m.addEventListener('ended',function(){ muteBtn.hidden=true; });
+      })();
       document.getElementById('introSkip').addEventListener('click',function(){
         if(tl) tl.kill();
         handoff();
