@@ -158,7 +158,7 @@
 </head>
 <body class="intro-active">
   <!-- Intro track: started on the seal-press, plays once and fades on its own. Kept OUTSIDE #introGate so it keeps playing after the gate is removed on hand-off to the evite. -->
-  <audio id="introMusic" src="assets/intro-music.mp3" preload="auto"></audio>
+  <audio id="introMusic" src="assets/intro-music.mp3" preload="auto" style="display:none"></audio>
   <!-- INTRO GATE: shown first; cracks open to reveal the evite below. Removed entirely for reduced-motion. -->
   <div id="introGate" role="dialog" aria-label="Open your invitation">
     <button class="skip" id="introSkip" type="button">Skip intro →</button>
@@ -334,7 +334,7 @@
           .to(flap,{rotationX:-172,duration:.7,ease:'power3.inOut'},'-=.15')
           // 3) Polaroids spill out one at a time — graceful, each gets its moment
           .add('spill','-=.2');
-        const P=pile(); const STAG=1.0, DUR=0.95;
+        const P=pile(); const STAG=1.2, DUR=0.95;
         cards.forEach((c,i)=>{
           const at='spill+='+(i*STAG);
           gsap.set(c,{xPercent:-50,yPercent:-50,x:0,y:-4,rotation:0,scale:.18,opacity:0,zIndex:10+i});
