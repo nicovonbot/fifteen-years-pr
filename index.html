@@ -157,6 +157,8 @@
 </style>
 </head>
 <body class="intro-active">
+  <!-- Intro track: started on the seal-press, plays once and fades on its own. Kept OUTSIDE #introGate so it keeps playing after the gate is removed on hand-off to the evite. -->
+  <audio id="introMusic" src="assets/intro-music.mp3" preload="auto"></audio>
   <!-- INTRO GATE: shown first; cracks open to reveal the evite below. Removed entirely for reduced-motion. -->
   <div id="introGate" role="dialog" aria-label="Open your invitation">
     <button class="skip" id="introSkip" type="button">Skip intro →</button>
@@ -171,8 +173,6 @@
       </div>
       <div class="prompt" id="prompt"><span>Press the seal</span></div>
     </div>
-    <!-- Intro track: plays once on seal-press (user gesture satisfies autoplay policy). Fade is baked into the file. -->
-    <audio id="introMusic" src="assets/intro-music.mp3" preload="auto"></audio>
   </div>
 
   <header class="hero">
