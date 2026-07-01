@@ -171,9 +171,8 @@
       </div>
       <div class="prompt" id="prompt"><span>Press the seal</span></div>
     </div>
-    <!-- MUSIC HOOK: Hector's track drops in here, e.g.
-         <audio id="introMusic" src="assets/intro-music.mp3" preload="auto"></audio>
-         then call introMusic.play() at the marked spot in open(). -->
+    <!-- Intro track: plays once on seal-press (user gesture satisfies autoplay policy). Fade is baked into the file. -->
+    <audio id="introMusic" src="assets/intro-music.mp3" preload="auto"></audio>
   </div>
 
   <header class="hero">
@@ -320,7 +319,9 @@
 
       function open(){
         if(opened) return; opened=true;
-        // MUSIC HOOK: once Hector's track is wired, start it here (e.g. document.getElementById('introMusic').play()).
+        // Start the intro track on this user gesture (plays once; fade is baked into the file).
+        const introMusic=document.getElementById('introMusic');
+        if(introMusic){ introMusic.play().catch(()=>{}); }
         gsap.set([halfL,halfR],{xPercent:-50,yPercent:-50,opacity:1});
         gsap.to(seal,{opacity:0,duration:.15});
         tl=gsap.timeline();
