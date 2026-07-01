@@ -341,7 +341,7 @@
           .to(flap,{rotationX:-172,duration:.7,ease:'power3.inOut'},'-=.15')
           // 3) Polaroids spill out one at a time — graceful, each gets its moment
           .add('spill','-=.2');
-        const P=pile(); const STAG=1.2, DUR=0.95;
+        const P=pile(); const STAG=1.35, DUR=0.95;
         cards.forEach((c,i)=>{
           const at='spill+='+(i*STAG);
           gsap.set(c,{xPercent:-50,yPercent:-50,x:0,y:-4,rotation:0,scale:.18,opacity:0,zIndex:10+i});
@@ -350,7 +350,7 @@
         });
         // 4) last photo lands, brief settle, then hand off to the evite
         const lastLand=(cards.length-1)*STAG+DUR;
-        tl.to(scene,{scale:.96,duration:.7,ease:'power1.out'},'spill+='+(lastLand+0.6))
+        tl.to(scene,{scale:.96,duration:.7,ease:'power1.out'},'spill+='+(lastLand+0.3))
           .add(handoff,'+=.25');
       }
 
